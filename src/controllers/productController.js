@@ -54,4 +54,39 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProduct, getProductById, createProduct, updateProduct, deleteProduct };
+const searchProducts = async (req, res) => {
+    const { keyword } = req.query;
+  
+    if (!keyword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Vui lòng nhập từ khóa tìm kiếm!'
+      });
+    }
+  
+    try {
+      const products = await Product.searchProductsByName(keyword);
+  
+      if (products.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Không tìm thấy sản phẩm nào!'
+        });
+      }
+  
+      res.json({
+        success: true,
+        message: `Đã tìm thấy ${products.length} sản phẩm`,
+        data: products
+      });
+    } catch (error) {
+      console.error('Lỗi tìm kiếm sản phẩm:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Đã xảy ra lỗi server!'
+      });
+    }
+  };
+  
+
+module.exports = { getProduct, getProductById, createProduct, updateProduct, deleteProduct,searchProducts };

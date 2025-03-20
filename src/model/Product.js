@@ -51,6 +51,19 @@ const Product = {
         const [result] = await db.query("DELETE FROM products WHERE product_id = ?", [product_id]);
         return result.affectedRows;
     },
+    searchProductsByName: async (keyword) => {
+        try {
+          const [rows] = await db.execute(
+            `SELECT * FROM products WHERE product_name LIKE ?`,
+            [`%${keyword}%`]
+          );
+          return rows;
+        } catch (error) {
+          console.error('Lỗi trong model searchProductsByName:', error);
+          throw error;
+        }
+      }
+      
 };
 
 module.exports = Product;

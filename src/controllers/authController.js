@@ -81,7 +81,7 @@ const forgotPassword = async (req, res) => {
             text: `Your password reset code is: ${resetCode}. It will expire in 15 minutes.`,
         });
 
-        res.json({ message: "Reset code sent to email" });
+        res.json({ success: true, message: "Reset code sent to email" });
 
     } catch (error) {
         res.status(500).json({ error: "Failed to send email", details: error.message });
