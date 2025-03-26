@@ -95,6 +95,23 @@ const Cart={
             [user_id]
         );
         return result.affectedRows;
-    }
+    },
+    clearCartByUserId: async (user_id) => {
+      const connection = await db.getConnection();
+      try {
+          const [result] = await connection.execute(
+              "DELETE FROM cart WHERE user_id = ?",
+              [user_id]
+          );
+
+          console.log(`🛒 Giỏ hàng của user ${user_id} đã được xóa!`);
+          return result.affectedRows;
+      } catch (error) {
+          console.error("❌ Lỗi khi xóa giỏ hàng:", error);
+          throw error;
+      } finally {
+          if (connection) connection.release();
+      }
+  }
 };
 module.exports =Cart;

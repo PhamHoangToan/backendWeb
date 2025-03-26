@@ -1,6 +1,7 @@
 const Order =require("../model/Order")
 const OrderItem =require("../model/OrderItem")
 const db = require('../config/db');
+const Cart=require("../model/Cart")
 const getOrders = async (req, res) => {
     try {
         const orders = await Order.getAll();
@@ -71,7 +72,7 @@ const createOrder = async (req, res) => {
   
       // GỌI createOrderItems TỪ OrderItemModel
       await OrderItem.createOrderItemsInDB(connection, order_id, items);
-  
+      await Cart.clearCartByUserId(user_id);
       await connection.commit();
   
       res.status(201).json({
